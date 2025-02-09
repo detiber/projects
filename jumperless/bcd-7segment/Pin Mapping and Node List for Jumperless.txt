@@ -1,0 +1,89 @@
+BCD Pinout                   7 segment display Pinout
+1 - A1        | 16 - Vcc    1 - A   | 14 - +3V
+2 - A2        | 15 - ^f     2 - F   | 13 - B
+3 - ^LT       | 14 - ^g     3 - +3V | 12 - N/A
+4 - ^BI/RBO   | 13 - ^a     4 - N/A | 11 - G
+5 - ^RBI      | 12 - ^b     5 - N/A | 10 - C
+6 - A3        | 11 - ^c     6 - LDP | 9 - RDP
+7 - A0        | 10 - ^d     7 - E   | 8 - D
+8 - GND       | 9  - ^e
+
+BCD -> Breadboard     7SEG -> Breadboard
+1: 13   | 16 - 43     1: 50 | 14 - 20
+2: 12   | 15 - 42     2: 51 | 13 - 21
+3: 11   | 14 - 41     3: 52 | 12 - 22
+4: 10   | 13 - 40     4: 53 | 11 - 23
+5: 9    | 12 - 39     5: 54 | 10 - 24
+6: 8    | 11 - 38     6: 55 | 9 - 25
+7: 7    | 10 - 37     7: 56 | 8 - 26
+8: 6    | 9 - 36
+
+Nano Pin mappings
+int BCD_A0 = 2;
+int BCD_A1 = 3;
+int BCD_A2 = 4;
+int BCD_A3 = 5;
+int BCD_LT = 7;
+int BCD_BI = 8;
+
+Connections
+++++++++++++
+BCD Power
+============
+GND: BCD 8 [BB 6] {GND-6}
+5V: BCD 16 [BB 43] {5V-43}
+3V3: BCD 5 [BB 9] {3V3-9} (RBI not used, but needs to be held High to display 0)
+
+7SEG Power
+============
+3V3: 7SEG 3 [BB 52] {3V3-52}
+3V3: 7SEG 14 [BB 20] {3V3-20}
+
+BCD Output to 7Seg
+==================
+BCD 9: 7SEG 7 (E Segment) {36-56}
+BCD 10: 7SEG 8 (D Segment) {37-26}
+BCD 11: 7SEG 10 (C Segment) {38-24}
+BCD 12: 7SEG 13 (B Segment) {39-21}
+BCD 13: 7SEG 1 (A Segment) {40-50}
+BCD 14: 7SEG 11 (G Segment) {41-23}
+BCD 15: 7SEG 2 (F Segment) {42-51}
+
+Nano to BCD
+==================
+D2: BCD 7 (A0) {D2-7}
+D3: BCD 1 (A1) {D3-13}
+D4: BCD 2 (A2) {D4-12}
+D5: BCD 6 (A3) {D5-8}
+D7: BCD 3 (LT) {D7-11}
+D8: BCD 4 (BI) {D8-10}
+
+
+f {
+GND-6,
+5V-43,
+3V3-9,
+3V3-52,
+3V3-20,
+}
+
+f {
+GND-6,
+5V-43,
+3V3-9,
+3V3-52,
+3V3-20,
+36-56,
+37-26,
+38-24,
+39-21,
+40-50,
+41-23,
+42-51,
+D2-7,
+D3-13,
+D4-12,
+D5-8,
+D7-11,
+D8-10,
+}
