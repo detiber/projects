@@ -13,3 +13,8 @@
 3. Run generateNodeList.py to get the nodelist for use with the Jumperless cli
 4. Run the jumperless cli, selecting the slot you desire, then paste the nodelist created above
 5. Flash bcd-7segment.ino onto the Arduino Nano connected to the jumperless
+
+## Notes
+
+- Updating jumperless over uart from Nano
+  - manually configure nodelist to start in the cli: `f 116-70, 117-71,`

@@ -1,3 +1,5 @@
+#include "jumperless.h"
+
 int BCD_A0 = 2;
 int BCD_A1 = 3;
 int BCD_A2 = 4;
@@ -6,6 +8,21 @@ int BCD_LT = 7;
 int BCD_BI = 8;
 
 void setup() {
+ 
+    Serial.begin(9600);
+    while (!Serial) {
+      ;  // wait for serial port to connect. Needed for native USB port only
+    }
+    Serial.println("Hello...");
+
+    Jumperless jumperless(115200);
+    delay(1500);
+    jumperless.AddConnection({"1","20"});
+    jumperless.AddConnection({"33","24"});
+    jumperless.MakeConnections();
+    
+    Serial.println("Continuing...");
+
     pinMode(BCD_A0, OUTPUT);
     pinMode(BCD_A1, OUTPUT);
     pinMode(BCD_A2, OUTPUT);
@@ -13,8 +30,6 @@ void setup() {
     pinMode(BCD_LT, OUTPUT);
     pinMode(BCD_BI, OUTPUT);
 
-    Serial.begin(9600);
-    Serial.println("Hello...");
     blank();
 
     lampTestEnable();
