@@ -12,8 +12,8 @@ Jumperless::Jumperless(int baud) {
     // Ensure UART Connections are included
     // connections.push_back({"UART_TX", "D0"});
     // connections.push_back({"UART_RX", "D1"});
-    connections.push_back({"117", "71"});
-    connections.push_back({"116", "70"});
+    // connections.push_back({"117", "71"});
+    // connections.push_back({"116", "70"});
 }
 
 void Jumperless::MakeConnections() {
@@ -26,6 +26,7 @@ void Jumperless::MakeConnections() {
 
     Serial.println("nodelist: " + nodes);
     Serial1.write(nodes.c_str());
+    Serial1.flush();
 }
 
 void Jumperless::AddConnection(connection connection) {

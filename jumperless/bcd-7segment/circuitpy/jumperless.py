@@ -15,10 +15,16 @@
 import busio
 
 class Jumperless:
-    def __init__(self, rx_pin, tx_pin):
-        self.uart = busio.UART(tx_pin, rx_pin, baudrate=115200)
+    def __init__(self, rx_pin, tx_pin, baudrate=115200):
+        self.uart = busio.UART(tx_pin, rx_pin, baudrate=baudrate)
+        self.connections = []
 
-    def make_connections(self, connection_list):
-        str_list = [f"{str(x)}-{str(y)}" for (x, y) in connection_list]
+    def add_connection(self, source, dest):
+        connection = (source, dest)
+        self.connections.append(connection)
+
+    def make_connections(self):
+        str_list = [f"{str(x)}-{str(y)}" for (x, y) in self.connections]
         command = f"f {",".join(str_list)},\n"
+        print(command.encode('utf-8'))
         self.uart.write(command.encode('utf-8'))
