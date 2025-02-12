@@ -13,11 +13,29 @@
 # limitations under the License.
 
 import busio
+from digitalio import DigitalInOut, Direction
 
 EOT = b'\x04'
 ACK = b'\x06'
 STX = b'\x02'
 RDY = b'\x01'
+
+class Nano:
+    def __init__(self):
+        self.digitalOutputs={}
+        self.digitalInputs={}
+
+    def addDigitalOutput(self, name, pin, pinName):
+        self.digitalOutputs[name]=pinName
+        do = DigitalInOut(pin)
+        do.direction = Direction.OUTPUT
+        return do
+
+    def addDigitalInput(self, name, pin, pinName):
+        self.digitalInputs[name]=pinName
+        do = DigitalInOut(pin)
+        do.direction = Direction.INPUT
+        return do
 
 class Jumperless:
     def __init__(self, rx_pin, tx_pin, baudrate=115200):
@@ -65,7 +83,3 @@ class Jumperless:
             
         print("sending EOT")
         self.uart.write(EOT)
-        # str_list = [f"{str(x)}-{str(y)}" for (x, y) in self.connections]
-        # command = f"f {",".join(str_list)},\n"
-        # print(command.encode('utf-8'))
-        # self.uart.write(command.encode('utf-8'))

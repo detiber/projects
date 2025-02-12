@@ -1,7 +1,6 @@
 import board
 import time
-from digitalio import DigitalInOut, Direction
-from jumperless import Jumperless
+from jumperless import Jumperless, Nano
 from bcd import BCDEncoder
 from sevenSeg import SevenSeg
 
@@ -9,6 +8,7 @@ bcdEncoder = BCDEncoder(13)
 sevenSeg = SevenSeg(50)
 
 jumperless = Jumperless(board.D0, board.D1)
+nano = Nano()
 
 # Map ground and power pins for the bcd encoder
 for pin in bcdEncoder.groundPins:
@@ -29,29 +29,16 @@ for k,source in bcdEncoder.outputPins.items():
     dest=sevenSeg.inputPins[k]
     jumperless.add_connection(bcdEncoder.rowForPin(source), sevenSeg.rowForPin(dest))
 
-a0 = DigitalInOut(board.D2)
-a0.direction = Direction.OUTPUT
-jumperless.add_connection("D2", bcdEncoder.rowForPin(bcdEncoder.inputPins["A0"]))
+a0 = nano.addDigitalOutput("A0", board.D2, "D2")
+a1 = nano.addDigitalOutput("A1", board.D3, "D3")
+a2 = nano.addDigitalOutput("A2", board.D4, "D4")
+a3 = nano.addDigitalOutput("A3", board.D5, "D5")
+lt = nano.addDigitalOutput("LT", board.D7, "D7")
+bi = nano.addDigitalOutput("BI", board.D8, "D8")
 
-a1 = DigitalInOut(board.D3)
-a1.direction = Direction.OUTPUT
-jumperless.add_connection("D3", bcdEncoder.rowForPin(bcdEncoder.inputPins["A1"]))
-
-a2 = DigitalInOut(board.D4)
-a2.direction = Direction.OUTPUT
-jumperless.add_connection("D4", bcdEncoder.rowForPin(bcdEncoder.inputPins["A2"]))
-
-a3 = DigitalInOut(board.D5)
-a3.direction = Direction.OUTPUT
-jumperless.add_connection("D5", bcdEncoder.rowForPin(bcdEncoder.inputPins["A3"]))
-
-lt = DigitalInOut(board.D7)
-lt.direction = Direction.OUTPUT
-jumperless.add_connection("D7", bcdEncoder.rowForPin(bcdEncoder.inputPins["LT"]))
-
-bi = DigitalInOut(board.D8)
-bi.direction = Direction.OUTPUT
-jumperless.add_connection("D8", bcdEncoder.rowForPin(bcdEncoder.inputPins["BI"]))
+for k,source in nano.digitalOutputs.items():
+    dest=bcdEncoder.inputPins[k]
+    jumperless.add_connection(source, bcdEncoder.rowForPin(dest))
 
 jumperless.make_connections()
 
