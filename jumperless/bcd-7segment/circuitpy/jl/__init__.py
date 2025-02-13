@@ -12,8 +12,34 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import busio
+"""
+`jumperless`
+=================================================
+
+Jumperless
+
+* Author(s): Guy Dupont, Jason DeTiberus
+
+Implementation Notes
+--------------------
+
+**Hardware:**
+
+* `Adafruit Device Description
+  <hyperlink>`_ (Product ID: <Product Number>)
+
+**Software and Dependencies:**
+
+* Adafruit CircuitPython firmware for the supported boards:
+  https://circuitpython.org/downloads
+
+"""
+
+from busio import UART
 from digitalio import DigitalInOut, Direction
+
+__version__ = "0.0.0+auto.0"
+__repo__ = "<repo github link>"
 
 EOT = b'\x04'
 ACK = b'\x06'
@@ -21,11 +47,20 @@ STX = b'\x02'
 RDY = b'\x01'
 
 class Nano:
+    """Arduino Nano.
+    """
+
     def __init__(self):
         self.digitalOutputs={}
         self.digitalInputs={}
 
     def addDigitalOutput(self, name, pin, pinName):
+        """Configures a digital output.
+
+        :param str name: The name to use for referencing the pin.
+        :param ~microcontroller.Pin pin: The microcontroller pin.
+        :param str pinName: The string name for the pin.
+        """
         self.digitalOutputs[name]=pinName
         do = DigitalInOut(pin)
         do.direction = Direction.OUTPUT
@@ -38,15 +73,42 @@ class Nano:
         return do
 
 class Jumperless:
+    """Jumperless.
+
+    :param ~microcontroller.Pin rx_pin: The pin to use for rx.
+    :param ~microcontroller.Pin tx_pin: The pin to use for tx.
+    :param int baudrate: The baudrate to use. Defaults to :const:`115200`
+    """
+
     def __init__(self, rx_pin, tx_pin, baudrate=115200):
-        self.uart = busio.UART(tx_pin, rx_pin, baudrate=baudrate)
+        self.uart = UART(tx_pin, rx_pin, baudrate=baudrate)
         self.connections = []
 
+    # def probe_pin(self):
+    #     print("Clearing the input buffer")
+    #     self.uart.reset_input_buffer()
+    #     print("Sending \"j\"")
+    #     self.uart.write("j")
+    #     result = self.uart.readline()
+    #     print("result: {}".format(result))
+    #     while result == None:
+    #         result = self.uart.readline()
+    #         print("result: {}".format(result))
+    #     return result
+
     def add_connection(self, source, dest):
+        """Adds a connection from source to dest.
+
+        :param int,str source: connection source
+        :param int,str dest: connection destination
+        """
         connection = (source, dest)
+        print("adding connection: {}".format(connection))
         self.connections.append(connection)
 
     def make_connections(self):
+        """Commits the registered connections to Jumperless.
+        """
         # the transmission order is:
         # Arduino (A) - Jumperless (J)
         # 
